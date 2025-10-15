@@ -1,0 +1,27 @@
+<script src="https://unpkg.com/@zxing/library@latest"></script>
+ <style>
+ body { font-family: sans-serif; text-align: center; margin: 0; }
+ video { width: 100%; height: auto; }
+ #result { margin-top: 1em; font-size: 1.2em; font-weight: bold; }
+ </style>
+</head>
+<body>
+ <h2>Scan VIN Barcode</h2>
+ <video id="preview"></video>
+ <div id="result">Waiting for scan...</div>
+
+ <script>
+ const codeReader = new ZXing.BrowserBarcodeReader();
+ const previewElem = document.getElementById('preview');
+ const resultElem = document.getElementById('result');
+
+ codeReader.decodeFromVideoDevice(null, previewElem, (result, err) => {
+ if (result) {
+ resultElem.textContent = "VIN: " + result.text;
+ // Send result back to Thunkable via postMessage
+ window.parent.postMessage(result.text, "*");
+ }
+ });
+ </script>
+</body>
+</html>
